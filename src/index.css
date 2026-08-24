@@ -1,0 +1,9 @@
+@import "tailwindcss";
+.story-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.story-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
