@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router";
 import { UserContext } from "../Contexts/UserContext";
 import Navbar from "../components/Navbar";
-import { StoryProvider } from "../Contexts/StoryContext";
 
 const AppLayout = () => {
   const { isLoggedin } = useContext(UserContext);
@@ -13,14 +12,14 @@ const AppLayout = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
+
       <Navbar />
 
-      {/* Main Content */}
+      {/* MAIN CONTENT */}
       <main className="ml-[72px] min-h-screen">
-        
-          <Outlet />
-        
+        <Outlet />
       </main>
+
     </div>
   );
 };

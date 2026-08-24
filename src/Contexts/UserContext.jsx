@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import usersData from "../userData/userData";
 
 export const UserContext = createContext();
 
@@ -6,26 +7,28 @@ export const UserProvider = ({ children }) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState({});
   const [allUsers, setAllUsers] = useState([]);
-  const [loggedInUserObj, setLoggedInUserObj] = useState(null); //jo user login hai uska object
-  const [errormsg, setErrormsg] = useState("")
+  const [loggedInUserObj, setLoggedInUserObj] = useState(null);
+  const [errormsg, setErrormsg] = useState("");
+
+  // Local dataset ko users state mein store kar rahe hain
   useEffect(() => {
-    (async () => {
-      const res = await fetch("https://dummyjson.com/users");
-      const { users } = await res.json();
-      setAllUsers(users);
-    })();
+    setAllUsers(usersData);
   }, []);
 
   const checkLogin = ({ email, password }) => {
     const response = allUsers.find((user) => {
-      return user.email == email && user.password == password;
+      return user.email === email && user.password === password;
     });
+
     setLoggedInUserObj(response);
-    if(!response){
+
+    if (!response) {
       setErrormsg("Email or password is invalid");
+    } else {
+      setErrormsg("");
     }
   };
- 
+
   const login = (userval) => {
     checkLogin(userval);
     setLoggedInUser(userval);
@@ -34,21 +37,29 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setIsLoggedin(false);
     setLoggedInUser(null);
+    setLoggedInUserObj(null);
   };
-  useEffect(()=>{
-    const loginfunc = () =>{
+
+  useEffect(() => {
     if (loggedInUserObj) {
       setIsLoggedin(true);
     } else {
       setIsLoggedin(false);
     }
-  }
-  loginfunc()
-  },[loggedInUserObj])
+  }, [loggedInUserObj]);
 
-  
   return (
-    <UserContext.Provider value={{ login, loggedInUser, isLoggedin, errormsg, loggedInUserObj }}>
+    <UserContext.Provider
+      value={{
+        login,
+        logout,
+        loggedInUser,
+        isLoggedin,
+        errormsg,
+        loggedInUserObj,
+        allUsers,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

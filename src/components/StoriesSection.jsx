@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { StoryContext } from "../Contexts/StoryContext";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+
 const StoriesSection = () => {
   const { newData } = useContext(StoryContext);
 
@@ -56,56 +56,65 @@ const StoriesSection = () => {
 
   return (
     <div className="relative w-full">
-      {/* Left Button */}{" "}
+
+      {/* LEFT BUTTON */}
       {showLeft && (
         <button
           onClick={scrollLeft}
           className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition text-[#b5b5b5] text-xl"
         >
-          {" "}
-          <MdKeyboardArrowLeft />{" "}
+          <MdKeyboardArrowLeft />
         </button>
       )}
+
       {/* STORIES */}
       <div
         ref={scrollRef}
         className="story-scroll w-full overflow-x-auto scroll-smooth px-2"
       >
         <div className="flex gap-4">
+
           {newData?.map((user) => (
             <div
               key={user.id}
               className="flex flex-col items-center min-w-[75px]"
             >
+
               {/* STORY RING */}
               <div className="p-[3px] rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
                 <div className="p-[2px] bg-black rounded-full">
+
+                  {/* Profile image */}
                   <img
                     src={user.image}
-                    alt="story-img"
+                    alt={user.username}
                     className="h-[65px] w-[65px] rounded-full object-cover"
                   />
+
                 </div>
               </div>
 
               {/* USERNAME */}
               <p className="text-xs mt-1 truncate w-[75px] text-center">
-                {user.username || user.name || "User"}
+                {user.username || "User"}
               </p>
+
             </div>
           ))}
+
         </div>
       </div>
-      {/* Right Button */}{" "}
+
+      {/* RIGHT BUTTON */}
       {showRight && (
         <button
           onClick={scrollRight}
           className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-7 w-7 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition text-[#b5b5b5] text-xl"
         >
-          {" "}
-          <MdKeyboardArrowRight />{" "}
+          <MdKeyboardArrowRight />
         </button>
       )}
+
     </div>
   );
 };

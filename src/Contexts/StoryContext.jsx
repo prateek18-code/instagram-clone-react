@@ -3,33 +3,27 @@ import { UserContext } from "./UserContext";
 
 export const StoryContext = createContext();
 
-export const StoryProvider = ({children}) =>{
-    const { loggedInUserObj} = useContext(UserContext)
-    
-    const [newData, setNewData] = useState([])
-    useEffect(() => {
+export const StoryProvider = ({ children }) => {
+  const { loggedInUserObj, allUsers } = useContext(UserContext);
 
-    if (!loggedInUserObj) return;
+  const [newData, setNewData] = useState([]);
 
-    (async () => {
-        const res = await fetch("https://dummyjson.com/users");
-        const data = await res.json();
+  useEffect(() => {
+    if (!loggedInUserObj || !allUsers.length) {
+      setNewData([]);
+      return;
+    }
 
-        const users = data.users;
+    const filteredUsers = allUsers.filter(
+      (user) => user.id !== loggedInUserObj.id
+    );
 
-        const filteredUsers = users.filter(
-            (user) => user.id !== loggedInUserObj.id
-        );
+    setNewData(filteredUsers);
+  }, [loggedInUserObj, allUsers]);
 
-        setNewData(filteredUsers);
-    })();
-
-}, [loggedInUserObj]);
-    
-    
-    return (
-        <StoryContext.Provider value={{newData}}>
-            {children}
-        </StoryContext.Provider>
-    )
-}
+  return (
+    <StoryContext.Provider value={{ newData }}>
+      {children}
+    </StoryContext.Provider>
+  );
+};
